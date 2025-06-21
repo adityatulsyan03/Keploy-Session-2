@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Users App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>User Form</h1>
+  <form id="userForm">
+    <input type="text" placeholder="Name" id="name" required />
+    <input type="email" placeholder="Email" id="email" required />
+    <input type="number" placeholder="Age" id="age" required />
+    <button type="submit">Add User</button>
+  </form>
+
+  <h2>Search User by ID</h2>
+  <input type="number" id="searchId" placeholder="Enter User ID" />
+  <button onclick="searchUser()">Search</button>
+  <div id="searchResult"></div>
+
+  <h2>All Users</h2>
+  <ul id="userList"></ul>
+
+  <script>
+    async function fetchUsers() {
+      const res = await fetch('/api/users');
+      const users = await res.json();
+      const list = document.getElementById('userList');
+      list.innerHTML = '';
+      users.forEach(u => {
+        const item = document.createElement('li');
+        item.textContent = `${u.name} (${u.email}) - Age ${u.age} `;
+
+        const delBtn = document.createElement('button');
+        delBtn.textContent = 'Delete';
+        delBtn.style.marginLeft = '10px';
+        delBtn.onclick = async () => {
+          await fetch(`/api/users/${u.id}`, { method: 'DELETE' });
+          fetchUsers();
+        };
+
+        item.appendChild(delBtn);
+        list.appendChild(item);
+      });
+    }
+
+    document.getElementById('userForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const age = document.getElementById('age').value;
+      await fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, age: parseInt(age) })
+      });
+      e.target.reset();
+      fetchUsers();
+    });
+
+    async function searchUser() {
+      const id = document.getElementById('searchId').value;
+      const resultDiv = document.getElementById('searchResult');
+      if (!id) {
+        resultDiv.textContent = 'Please enter a user ID';
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/users/${id}`);
+        if (!res.ok) throw new Error('User not found');
+        const user = await res.json();
+        resultDiv.textContent = `Found: ${user.name} (${user.email}) - Age ${user.age}`;
+      } catch (err) {
+        resultDiv.textContent = err.message;
+      }
+    }
+
+    fetchUsers();
+  </script>
+</body>
+</html>

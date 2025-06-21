@@ -1,0 +1,65 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f6f8;
+  padding: 40px;
+  color: #333;
+}
+
+h1, h2 {
+  color: #2c3e50;
+}
+
+form, #searchId {
+  margin-bottom: 20px;
+}
+
+input, button {
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+button {
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+ul#userList {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+ul#userList li {
+  background: #ffffff;
+  margin-bottom: 8px;
+  padding: 10px 15px;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+ul#userList li button {
+  background-color: #e74c3c;
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+ul#userList li button:hover {
+  background-color: #c0392b;
+}
+
+#searchResult {
+  font-weight: bold;
+  margin-top: 10px;
+  color: #2d3436;
+}
